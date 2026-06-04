@@ -24,7 +24,7 @@ A aplicação escolhida pelo grupo é um **diário de desabafos anônimos** — 
 
 Simples de entender, mas com comunicação distribuída real entre os módulos gRPC.
 
-### "Por que essa aplicação?"
+!!! tip "Por que essa aplicação?"
     A escolha foi intencional: o fluxo de publicação e leitura de posts é um caso natural para demonstrar **todos os quatro tipos de comunicação gRPC** (unary, server-streaming, client-streaming e bidirecional).
 
 ---
