@@ -70,7 +70,7 @@ Mantém um canal bidirecional: quando um cliente envia uma mensagem, o servidor 
 ### Funcionalidades
 
 #### `EnviarReacoes` — Client Streaming
-Recebe um fluxo de reações (ex: `❤️`, `😢`, `💪`) relacionadas a desabafos específicos, acumula em memória e ao final retorna um resumo com o total processado.
+Recebe um fluxo de reações (ex: `❤️`) relacionadas a desabafos específicos, acumula em memória e ao final retorna um resumo com o total processado.
 
 ```java
 @Override
