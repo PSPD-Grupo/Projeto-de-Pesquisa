@@ -28,12 +28,17 @@ Acesse a documentação completa do projeto em:
 
 ```
 Projeto-de-Pesquisa/
-├── docs/               # Fonte da documentação (MkDocs)
-│   ├── grpc/           # Teoria e exemplos do framework gRPC
-│   ├── microsservicos/ # Aplicação Desabafo e arquitetura
-│   └── index.md        # Página inicial
-├── mkdocs.yml          # Configuração do MkDocs Material
-└── .github/workflows/  # Deploy automático para GitHub Pages
+├── docs/                    # Fonte da documentação (MkDocs)
+│   ├── grpc/                # Teoria e exemplos do framework gRPC
+│   ├── microsservicos/      # Aplicação Desabafo e arquitetura
+│   ├── especificacao.md     # O que o professor pediu + arquivo .proto
+│   └── index.md             # Página inicial
+├── proto/                   # Arquivo .proto compartilhado entre os módulos
+├── modulo-p/                # API Gateway (Web Server + gRPC Stub)
+├── servidor-a/              # gRPC Server — Desabafos
+├── servidor-b/              # gRPC Server — Reações ❤️
+├── mkdocs.yml               # Configuração do MkDocs Material
+└── .github/workflows/       # Deploy automático para GitHub Pages
 ```
 
 ---

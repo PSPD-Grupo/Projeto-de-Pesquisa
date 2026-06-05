@@ -51,6 +51,7 @@ markdown_extensions:
 
 nav:
   - Início: index.md
+  - Especificação: especificacao.md
   - gRPC:
       - Visão Geral: grpc/index.md
       - Protobuf: grpc/protobuf.md
@@ -62,4 +63,3 @@ nav:
       - Arquitetura: microsservicos/arquitetura.md
       - Funcionalidades Planejadas: microsservicos/diario-desabafo.md
   - Sobre o Grupo: sobre.md
-  
