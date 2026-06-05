@@ -5,7 +5,7 @@
 *Desabafo* é um **diário anônimo distribuído** — um espaço simples onde qualquer pessoa pode publicar um texto curto para desabafar, sem precisar de conta ou identificação, e ver o que outros estão sentindo.
 
 Pense num Twitter, mas:
-- Sem curtidas públicas (só reações anônimas)
+- Com apenas uma reação anônima: ❤️
 - Sem seguidores
 - Sem histórico ligado a você
 - Só o desabafo importa
@@ -36,8 +36,8 @@ Pense num Twitter, mas:
 - Sala ao vivo (streaming bidirecional)
 
 ### Servidor B – Reações
-- Receber reações em lote (❤️)
-- Retornar contagem de reações por desabafo
+- Receber reações ❤️ em lote
+- Retornar contagem de corações por desabafo
 
 ---
 

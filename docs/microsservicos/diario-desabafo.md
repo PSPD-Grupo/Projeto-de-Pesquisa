@@ -70,7 +70,7 @@ Mantém um canal bidirecional: quando um cliente envia uma mensagem, o servidor 
 ### Funcionalidades
 
 #### `EnviarReacoes` — Client Streaming
-Recebe um fluxo de reações (ex: `❤️`) relacionadas a desabafos específicos, acumula em memória e ao final retorna um resumo com o total processado.
+Recebe um fluxo de ❤️ relacionados a desabafos específicos, acumula em memória e ao final retorna um resumo com o total processado.
 
 ```java
 @Override
@@ -81,7 +81,7 @@ public StreamObserver<ReacaoRequest> enviarReacoes(
 
     @Override
     public void onNext(ReacaoRequest req) {
-      armazenar(req.getDesabafoId(), req.getTipo());
+      armazenar(req.getDesabafoId()); // sempre ❤️
       total++;
     }
 
@@ -106,7 +106,7 @@ Para simplicidade, os servidores usam **armazenamento em memória** (maps/dicion
 | Servidor | Dados |
 |---|---|
 | A | `map[string]Desabafo` — id → desabafo |
-| B | `map[string]map[string]int` — desabafo_id → {tipo → contagem} |
+| B | `map[string]int` — desabafo_id → contagem de ❤️ |
 
 ---
 

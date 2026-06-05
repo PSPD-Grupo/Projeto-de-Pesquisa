@@ -26,7 +26,7 @@ message PublicarResponse { string id     = 1; bool sucesso = 2; }
 
 message FeedRequest      { int32  limite = 1; }
 
-message ReacaoRequest    { string desabafo_id = 1; string tipo = 2; }
+message ReacaoRequest    { string desabafo_id = 1; }
 message ResumoReacoes    { int32  total = 1; }
 
 message MensagemAoVivo   { string texto = 1; string sala_id = 2; }
@@ -133,11 +133,11 @@ service ReacaoService {
 === "Cliente (Python)"
     ```python
     def gerar_reacoes():
-        for tipo in ["❤️", "❤️", "❤️"]:
-            yield diario_pb2.ReacaoRequest(desabafo_id="abc123", tipo=tipo)
+        for desabafo_id in ["abc123", "def456", "ghi789"]:
+            yield diario_pb2.ReacaoRequest(desabafo_id=desabafo_id)
 
     resumo = stub_reacao.EnviarReacoes(gerar_reacoes())
-    print(f"Total de reações processadas: {resumo.total}")
+    print(f"Total de ❤️ processados: {resumo.total}")
     ```
 
 ---
