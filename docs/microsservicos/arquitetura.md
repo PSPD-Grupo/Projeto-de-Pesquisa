@@ -4,16 +4,13 @@
 
 A aplicação segue a arquitetura definida pelo professor: um **frontend HTTP** (módulo P) que se comunica com dois **microserviços gRPC** (A e B) no backend, todos rodando em containers separados no Kubernetes.
 
-```
-┌────────────┐   HTTP/REST   ┌──────────────────────────────────────────┐
-│            │               │                K8S (minikube)            │
-│ WEB CLIENT │◀─────────────▶│  ┌──────────┐                           │
-│ (browser)  │               │  │    (P)   │──gRPC──▶ Servidor A (Go)  │
-└────────────┘               │  │ Python   │                           │
-                             │  │ FastAPI  │──gRPC──▶ Servidor B (Java)│
-                             │  └──────────┘                           │
-                             └──────────────────────────────────────────┘
-```
+<div align="center">
+<font size="3"><p style="text-align: center"><b>Figura 1:</b> Arquitetura de Comunicação do projeto</p></font>
+
+![Imagem 1](../img/arquitetura.jpg)
+
+<font size="3"><p style="text-align: center"><b>Autor:</b> <a href="https://github.com/gabrielfreitass1">Gabriel Freitas</a>, 2026.</p></font> 
+</div>
 
 ---
 
@@ -79,3 +76,9 @@ Browser          P (FastAPI)         A (Go gRPC)
    │                  │◀── {id, sucesso} ──│
    │◀── 200 OK {id} ──│                   │
 ```
+
+## Histórico de Versão
+| Versão | Data       | Descrição                                      | Autor               | Revisor               |
+|--------|------------|------------------------------------------------|---------------------|-----------------------|
+| 1.0    | 04/06/2026 | Primeira versão do artefato gRPC | [Milena Baruc Rodrigues Morais](https://github.com/MilenaBaruc) | [Milena Baruc Rodrigues Morais](https://github.com/MilenaBaruc) |
+| 1.1    | 06/06/2026 | Atualização das imagens | [Gabriel Freitas Balbino](https://github.com/gabrielfreitass1) | [Gabriel Freitas Balbino](https://github.com/gabrielfreitass1) |

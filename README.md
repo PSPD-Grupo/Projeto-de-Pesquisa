@@ -51,3 +51,32 @@ O projeto envolve dois objetivos principais:
 2. **Construir uma aplicação distribuída** — microserviços com deploy no Kubernetes (minikube)
 
 A aplicação escolhida é o **Desabafo**, um diário anônimo distribuído onde usuários podem publicar textos curtos, ver um feed e interagir em tempo real.
+
+--- 
+## Screenshots Do Trabalho
+![Imagem 1]()<br>
+
+
+
+---
+
+## Instação de Dependencias
+**Linguagens:** Java, Go <br>
+**Frameworks:**  gRPC, Kubernets <br>
+
+```bash
+
+```
+
+---
+
+### Execução do projeto
+```
+cd src/
+python main.py
+```    
+                                                                             
+---
+
+### Link da apresentação
+[Vídeo]()<br>

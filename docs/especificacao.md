@@ -12,15 +12,13 @@ Construir uma aplicação distribuída baseada em **microserviços gRPC** e faze
 
 ## Arquitetura exigida
 
-```
-                        ┌─────────────────────────────┐
-                        │         K8S (minikube)       │
-                        │                              │
-Browser ──HTTP──▶ (P)  ──gRPC──▶ gRPC Server (A)      │
-         WEB Client  WEB Server                        │
-                        │        ──gRPC──▶ gRPC Server (B) │
-                        └─────────────────────────────┘
-```
+<div align="center">
+<font size="3"><p style="text-align: center"><b>Figura 1:</b> Arquitetura de Comunicação do projeto</p></font>
+
+![Imagem 1](docs/img/arquitetura.jpg)
+
+<font size="3"><p style="text-align: center"><b>Autor:</b> <a href="https://github.com/gabrielfreitass1">Gabriel Freitas</a>, 2026.</p></font> 
+</div>
 
 - **(P)** — Web Server + gRPC Stub (API Gateway): recebe HTTP e repassa via gRPC
 - **(A)** — gRPC Server: microserviço de desabafos
@@ -74,3 +72,9 @@ Browser ──HTTP──▶ (P)  ──gRPC──▶ gRPC Server (A)      │
 ```protobuf
 //colocar o .proto aqui
 ```
+
+## Histórico de Versão
+| Versão | Data       | Descrição                                      | Autor               | Revisor               |
+|--------|------------|------------------------------------------------|---------------------|-----------------------|
+| 1.0    | 04/06/2026 | Primeira versão do artefato grpc | [Milena Baruc Rodrigues Morais](https://github.com/MilenaBaruc) | [Milena Baruc Rodrigues Morais](https://github.com/MilenaBaruc) |
+| 1.1    | 06/06/2026 | Atualizando Imagens | [Gabriel Freitas Balbino](https://github.com/gabrielfreitass1) | [Gabriel Freitas Balbino](https://github.com/gabrielfreitass1) |

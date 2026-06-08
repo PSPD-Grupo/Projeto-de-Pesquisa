@@ -1,19 +1,40 @@
 # gRPC – Visão Geral
 
-**gRPC** (Google Remote Procedure Call) é um framework open-source de comunicação remota de alta performance, criado pelo Google e mantido pela CNCF.
+**gRPC** (Google Remote Procedure Call) é um framework open-source de comunicação remota de alta performance, criado pelo Google e mantido pela CNCF. Ele é usado para conectar diferentes aplicações e microsserviços de forma extremamente rápida e leve. Ele utiliza o modelo de comunicação RPC.
+O ponto forte dele é permitir a conexão em qualquer ambiente e de forma robusta.
+
 
 ---
 
 ## O que é RPC?
 
-RPC (*Remote Procedure Call*) é um modelo de comunicação onde um programa chama uma função que está rodando em **outro processo ou máquina**, como se fosse uma chamada local. O gRPC moderniza esse conceito usando:
+RPC (*Remote Procedure Call*) é um modelo de comunicação em que um programa chama uma função que está rodando em **outro processo ou máquina**, como se fosse uma chamada local através da rede.
+Uma das maiores vantagens do RPC é que pouco importam os detalhes da rede. Como o RPC é uma operação síncrona, ele exige que o programa solicitante (cliente) fique suspenso até que os resultados do procedimento remoto fiquem prontos e sejam retornados pelo servidor.
+<div align="center">
+<font size="3"><p style="text-align: center"><b>Figura 1:</b> Exemplo de Comunicação com RPC síncrono</p></font>
+
+![RPC síncrono](../img/sync.png)
+
+<font size="3"><p style="text-align: center"><b>Figura 2:</b> Exemplo de Comunicação com RPC assíncrono</p></font>
+
+![RPC assíncrono](../img/assync.png)
+
+<font size="3"><p style="text-align: center"><b>Autor:</b> Tanenbaum e Steen, 2007.</p></font>
+</div>
+
+O gRPC moderniza esse conceito usando:
 
 - **Protobuf** como formato de serialização (substitui JSON/XML)
 - **HTTP/2** como protocolo de transporte (substitui HTTP/1.1)
 
+
+
 ---
 
 ## Por que usar gRPC?
+
+A ideia do gRPC é ser mais rápido que o REST tradicional. Mas como ele faz isso?
+No HTTP/1.1, a comunicação costuma usar texto plano, criando pacotes de dados mais pesados. O gRPC utiliza HTTP/2 e codifica as mensagens em formato binário, naturalmente mais leve que o formato textual. Ele faz isso por meio de outra ferramenta chamada **Protobuf**, que define como um sistema espera receber as mensagens de outro sistema.
 
 | Característica | REST/JSON | gRPC/Protobuf |
 |---|---|---|
@@ -28,14 +49,13 @@ RPC (*Remote Procedure Call*) é um modelo de comunicação onde um programa cha
 
 ## Componentes principais
 
-```
-┌─────────────┐         .proto         ┌─────────────┐
-│   Cliente   │ ──── define contrato ──▶│   Servidor  │
-│  (Stub)     │                         │  (Service)  │
-└──────┬──────┘                         └──────┬──────┘
-       │         HTTP/2 + Protobuf             │
-       └─────────────────────────────────────-─┘
-```
+<div align="center">
+<font size="3"><p style="text-align: center"><b>Figura 3:</b> Exemplo de Comunicação com gRPC</p></font>
+
+![Imagem 3](../img/diagramagRPC.jpg)
+
+<font size="3"><p style="text-align: center"><b>Autor:</b> <a href="https://github.com/gabrielfreitass1">Gabriel Freitas</a>, 2026.</p></font> 
+</div>
 
 - **`.proto` file** — define os serviços e mensagens (contrato da API)
 - **Stub (cliente)** — código gerado automaticamente que o cliente usa para chamar o servidor
@@ -50,3 +70,14 @@ RPC (*Remote Procedure Call*) é um modelo de comunicação onde um programa cha
     - [HTTP/2 em detalhes →](http2.md)
     - [Os 4 tipos de comunicação →](tipos-comunicacao.md)
     - [Exemplos e testes realizados →](exemplos.md)
+
+## Fontes
+>https://www.youtube.com/watch?v=F4t3ZBVMlvo&t=31s
+
+>https://grpc.io/docs/what-is-grpc/introduction/
+
+## Histórico de Versão
+| Versão | Data       | Descrição                                      | Autor               | Revisor               |
+|--------|------------|------------------------------------------------|---------------------|-----------------------|
+| 1.0    | 04/06/2026 | Primeira versão do artefato gRPC | [Milena Baruc Rodrigues Morais](https://github.com/MilenaBaruc) | [Milena Baruc Rodrigues Morais](https://github.com/MilenaBaruc) |
+| 1.1    | 06/06/2026 | Atualização das imagens e de algumas descrições | [Gabriel Freitas Balbino](https://github.com/gabrielfreitass1) | [Gabriel Freitas Balbino](https://github.com/gabrielfreitass1) |
