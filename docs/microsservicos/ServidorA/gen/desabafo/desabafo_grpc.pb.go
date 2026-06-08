@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FeedClient interface {
 	PostDesabafo(ctx context.Context, in *RascunhoDesabafo, opts ...grpc.CallOption) (*Desabafo, error)
-	GetFeed(ctx context.Context, in *FeedRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FeedReturn], error)
+	GetFeed(ctx context.Context, in *FeedRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Desabafo], error)
 }
 
 type feedClient struct {
@@ -49,13 +49,13 @@ func (c *feedClient) PostDesabafo(ctx context.Context, in *RascunhoDesabafo, opt
 	return out, nil
 }
 
-func (c *feedClient) GetFeed(ctx context.Context, in *FeedRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FeedReturn], error) {
+func (c *feedClient) GetFeed(ctx context.Context, in *FeedRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Desabafo], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &Feed_ServiceDesc.Streams[0], Feed_GetFeed_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &grpc.GenericClientStream[FeedRequest, FeedReturn]{ClientStream: stream}
+	x := &grpc.GenericClientStream[FeedRequest, Desabafo]{ClientStream: stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -66,14 +66,14 @@ func (c *feedClient) GetFeed(ctx context.Context, in *FeedRequest, opts ...grpc.
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type Feed_GetFeedClient = grpc.ServerStreamingClient[FeedReturn]
+type Feed_GetFeedClient = grpc.ServerStreamingClient[Desabafo]
 
 // FeedServer is the server API for Feed service.
 // All implementations must embed UnimplementedFeedServer
 // for forward compatibility.
 type FeedServer interface {
 	PostDesabafo(context.Context, *RascunhoDesabafo) (*Desabafo, error)
-	GetFeed(*FeedRequest, grpc.ServerStreamingServer[FeedReturn]) error
+	GetFeed(*FeedRequest, grpc.ServerStreamingServer[Desabafo]) error
 	mustEmbedUnimplementedFeedServer()
 }
 
@@ -87,7 +87,7 @@ type UnimplementedFeedServer struct{}
 func (UnimplementedFeedServer) PostDesabafo(context.Context, *RascunhoDesabafo) (*Desabafo, error) {
 	return nil, status.Error(codes.Unimplemented, "method PostDesabafo not implemented")
 }
-func (UnimplementedFeedServer) GetFeed(*FeedRequest, grpc.ServerStreamingServer[FeedReturn]) error {
+func (UnimplementedFeedServer) GetFeed(*FeedRequest, grpc.ServerStreamingServer[Desabafo]) error {
 	return status.Error(codes.Unimplemented, "method GetFeed not implemented")
 }
 func (UnimplementedFeedServer) mustEmbedUnimplementedFeedServer() {}
@@ -134,11 +134,11 @@ func _Feed_GetFeed_Handler(srv interface{}, stream grpc.ServerStream) error {
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(FeedServer).GetFeed(m, &grpc.GenericServerStream[FeedRequest, FeedReturn]{ServerStream: stream})
+	return srv.(FeedServer).GetFeed(m, &grpc.GenericServerStream[FeedRequest, Desabafo]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type Feed_GetFeedServer = grpc.ServerStreamingServer[FeedReturn]
+type Feed_GetFeedServer = grpc.ServerStreamingServer[Desabafo]
 
 // Feed_ServiceDesc is the grpc.ServiceDesc for Feed service.
 // It's only intended for direct use with grpc.RegisterService,

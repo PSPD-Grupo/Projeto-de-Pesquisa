@@ -19,9 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ChatService_Chat_FullMethodName      = "/chat.ChatService/Chat"
-	ChatService_JoinRoom_FullMethodName  = "/chat.ChatService/JoinRoom"
-	ChatService_LeaveRoom_FullMethodName = "/chat.ChatService/LeaveRoom"
+	ChatService_Chat_FullMethodName = "/chat.ChatService/Chat"
 )
 
 // ChatServiceClient is the client API for ChatService service.
@@ -30,9 +28,6 @@ const (
 type ChatServiceClient interface {
 	// Bidirectional streaming: client and server both send messages freely.
 	Chat(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[ChatMessage, ChatMessage], error)
-	// Unary helpers (optional but practical)
-	JoinRoom(ctx context.Context, in *JoinRequest, opts ...grpc.CallOption) (*JoinResponse, error)
-	LeaveRoom(ctx context.Context, in *LeaveRequest, opts ...grpc.CallOption) (*LeaveResponse, error)
 }
 
 type chatServiceClient struct {
@@ -56,35 +51,12 @@ func (c *chatServiceClient) Chat(ctx context.Context, opts ...grpc.CallOption) (
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type ChatService_ChatClient = grpc.BidiStreamingClient[ChatMessage, ChatMessage]
 
-func (c *chatServiceClient) JoinRoom(ctx context.Context, in *JoinRequest, opts ...grpc.CallOption) (*JoinResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(JoinResponse)
-	err := c.cc.Invoke(ctx, ChatService_JoinRoom_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *chatServiceClient) LeaveRoom(ctx context.Context, in *LeaveRequest, opts ...grpc.CallOption) (*LeaveResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(LeaveResponse)
-	err := c.cc.Invoke(ctx, ChatService_LeaveRoom_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // ChatServiceServer is the server API for ChatService service.
 // All implementations must embed UnimplementedChatServiceServer
 // for forward compatibility.
 type ChatServiceServer interface {
 	// Bidirectional streaming: client and server both send messages freely.
 	Chat(grpc.BidiStreamingServer[ChatMessage, ChatMessage]) error
-	// Unary helpers (optional but practical)
-	JoinRoom(context.Context, *JoinRequest) (*JoinResponse, error)
-	LeaveRoom(context.Context, *LeaveRequest) (*LeaveResponse, error)
 	mustEmbedUnimplementedChatServiceServer()
 }
 
@@ -97,12 +69,6 @@ type UnimplementedChatServiceServer struct{}
 
 func (UnimplementedChatServiceServer) Chat(grpc.BidiStreamingServer[ChatMessage, ChatMessage]) error {
 	return status.Error(codes.Unimplemented, "method Chat not implemented")
-}
-func (UnimplementedChatServiceServer) JoinRoom(context.Context, *JoinRequest) (*JoinResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method JoinRoom not implemented")
-}
-func (UnimplementedChatServiceServer) LeaveRoom(context.Context, *LeaveRequest) (*LeaveResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method LeaveRoom not implemented")
 }
 func (UnimplementedChatServiceServer) mustEmbedUnimplementedChatServiceServer() {}
 func (UnimplementedChatServiceServer) testEmbeddedByValue()                     {}
@@ -132,58 +98,13 @@ func _ChatService_Chat_Handler(srv interface{}, stream grpc.ServerStream) error 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type ChatService_ChatServer = grpc.BidiStreamingServer[ChatMessage, ChatMessage]
 
-func _ChatService_JoinRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(JoinRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ChatServiceServer).JoinRoom(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ChatService_JoinRoom_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatServiceServer).JoinRoom(ctx, req.(*JoinRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ChatService_LeaveRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LeaveRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ChatServiceServer).LeaveRoom(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ChatService_LeaveRoom_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatServiceServer).LeaveRoom(ctx, req.(*LeaveRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // ChatService_ServiceDesc is the grpc.ServiceDesc for ChatService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ChatService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "chat.ChatService",
 	HandlerType: (*ChatServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "JoinRoom",
-			Handler:    _ChatService_JoinRoom_Handler,
-		},
-		{
-			MethodName: "LeaveRoom",
-			Handler:    _ChatService_LeaveRoom_Handler,
-		},
-	},
+	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "Chat",
