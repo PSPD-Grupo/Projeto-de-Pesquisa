@@ -19,7 +19,7 @@ func NewDesabafoDb(texto string) *desabafoDb {
 }
 
 func (d *desabafoDb) Insert() error {
-	result, err := Db.Exec(`INSERT INTO desabafo (texto, created_at) VALUES (?, ?)`, d.Texto, d.Created_at)
+	result, err := Db.Exec(`INSERT INTO desabafo (texto, created_at) VALUES (?, ?);`, d.Texto, d.Created_at)
 	if err != nil {
 		return err
 	}
@@ -34,7 +34,7 @@ func (d *desabafoDb) Insert() error {
 }
 
 func (db *DataBase) GetNdesabafos(n int) ([]desabafoDb, error) {
-	rows, err := db.db.Query(" SELECT * FROM desabafo ORDER BY created_at DESC LIMIT ?", n)
+	rows, err := db.db.Query(" SELECT * FROM desabafo ORDER BY created_at DESC LIMIT ?;", n)
 	if err != nil {
 		return nil, err
 	}
