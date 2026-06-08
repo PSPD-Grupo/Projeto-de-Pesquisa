@@ -11,6 +11,8 @@ import (
 
 type DataBaseInterface interface {
 	Exec(query string, args ...interface{}) (sql.Result, error)
+
+	GetNdesabafos(n int) ([]desabafoDb, error)
 }
 
 type DataBase struct {

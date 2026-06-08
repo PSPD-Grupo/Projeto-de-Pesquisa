@@ -5,7 +5,7 @@ option go_package = "gen/desabafo;desabafo";
 
 service Feed {
     rpc PostDesabafo(RascunhoDesabafo) returns (Desabafo);
-    rpc GetFeed(FeedRequest) returns (stream FeedReturn);
+    rpc GetFeed(FeedRequest) returns (stream Desabafo);
 }
 
 message FeedRequest {}
@@ -18,8 +18,4 @@ message Desabafo {
     string texto=1;
     int32 id =2;
     int64 created_at = 3;
-}
-
-message FeedReturn {
-    repeated Desabafo desabafos =1;
 }

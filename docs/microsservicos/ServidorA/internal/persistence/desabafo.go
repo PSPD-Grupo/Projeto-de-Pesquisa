@@ -1,6 +1,8 @@
 package persistence
 
-import "time"
+import (
+	"time"
+)
 
 type desabafoDb struct {
 	Texto      string `sql:"texto"`
@@ -29,4 +31,22 @@ func (d *desabafoDb) Insert() error {
 
 	d.Id = int(id)
 	return nil
+}
+
+func (db *DataBase) GetNdesabafos(n int) ([]desabafoDb, error) {
+	rows, err := db.db.Query(" SELECT * FROM desabafo ORDER BY created_at DESC LIMIT ?", n)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var result []desabafoDb
+
+	for rows.Next() {
+		var d desabafoDb
+		rows.Scan(&d.Id, &d.Texto, &d.Created_at)
+		result = append(result, d)
+	}
+	return result, nil
+
 }

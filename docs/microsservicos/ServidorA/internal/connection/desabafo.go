@@ -8,11 +8,11 @@ import (
 	"ServidorA/internal/persistence"
 )
 
-type feedServer struct {
+type FeedServer struct {
 	desabafo.UnimplementedFeedServer
 }
 
-func (fs feedServer) PostDesabafo(_ context.Context, in *desabafo.RascunhoDesabafo) (*desabafo.Desabafo, error) {
+func (fs *FeedServer) PostDesabafo(_ context.Context, in *desabafo.RascunhoDesabafo) (*desabafo.Desabafo, error) {
 	novo_desabafo := persistence.NewDesabafoDb(in.Texto)
 	err := novo_desabafo.Insert()
 	if err != nil {
@@ -26,4 +26,25 @@ func (fs feedServer) PostDesabafo(_ context.Context, in *desabafo.RascunhoDesaba
 	}
 
 	return &retorno, nil
+}
+
+func (fs *FeedServer) GetFeed(_ *desabafo.FeedRequest, stream desabafo.Feed_GetFeedServer) error {
+	desabafos, err := persistence.Db.GetNdesabafos(5)
+	if err != nil {
+		log.Println("could not get desabafos: %v", err)
+		return err
+	}
+	for _, d := range desabafos {
+		var d_retorno *desabafo.Desabafo
+		d_retorno = &desabafo.Desabafo{
+			Id:        int32(d.Id),
+			Texto:     d.Texto,
+			CreatedAt: d.Created_at,
+		}
+		if err = stream.Send(d_retorno); err != nil {
+			log.Println("erro ao enviar mensagem:", err)
+			return err
+		}
+	}
+	return nil
 }
