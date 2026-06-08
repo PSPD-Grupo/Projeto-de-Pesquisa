@@ -28,8 +28,8 @@ func (fs *FeedServer) PostDesabafo(_ context.Context, in *desabafo.RascunhoDesab
 	return &retorno, nil
 }
 
-func (fs *FeedServer) GetFeed(_ *desabafo.FeedRequest, stream desabafo.Feed_GetFeedServer) error {
-	desabafos, err := persistence.Db.GetNdesabafos(5)
+func (fs *FeedServer) GetFeed(fr *desabafo.FeedRequest, stream desabafo.Feed_GetFeedServer) error {
+	desabafos, err := persistence.Db.GetNdesabafos(int(fr.Quant))
 	if err != nil {
 		log.Println("could not get desabafos: %v", err)
 		return err

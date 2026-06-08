@@ -8,7 +8,9 @@ service Feed {
     rpc GetFeed(FeedRequest) returns (stream Desabafo);
 }
 
-message FeedRequest {}
+message FeedRequest {
+    int64 quant =1;
+}
 
 message RascunhoDesabafo {
     string texto=1;
