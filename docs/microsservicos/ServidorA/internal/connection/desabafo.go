@@ -24,7 +24,6 @@ func (fs *FeedServer) PostDesabafo(_ context.Context, in *desabafo.RascunhoDesab
 		Texto:     novo_desabafo.Texto,
 		CreatedAt: novo_desabafo.Created_at,
 	}
-
 	return &retorno, nil
 }
 
