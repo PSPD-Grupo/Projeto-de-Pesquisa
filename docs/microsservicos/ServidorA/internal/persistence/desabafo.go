@@ -19,7 +19,16 @@ func NewDesabafoDb(texto string) *desabafoDb {
 }
 
 func (d *desabafoDb) Insert() error {
+<<<<<<< HEAD
 	result, err := Db.Exec(`INSERT INTO desabafo (texto, created_at) VALUES (?, ?);`, d.Texto, d.Created_at)
+=======
+	result, err := Db.Exec(
+		`INSERT INTO desabafo (id, texto, created_at)
+		VALUES ((SELECT COALESCE(MAX(id), 0) + 1 FROM desabafo), ?, ?)`,
+		d.Texto,
+		d.Created_at,
+	)
+>>>>>>> 4551b46 (Server stub)
 	if err != nil {
 		return err
 	}
@@ -34,7 +43,11 @@ func (d *desabafoDb) Insert() error {
 }
 
 func (db *DataBase) GetNdesabafos(n int) ([]desabafoDb, error) {
+<<<<<<< HEAD
 	rows, err := db.db.Query(" SELECT * FROM desabafo ORDER BY created_at DESC LIMIT ?;", n)
+=======
+	rows, err := db.db.Query("SELECT id, texto, created_at FROM desabafo ORDER BY created_at DESC LIMIT ?", n)
+>>>>>>> 4551b46 (Server stub)
 	if err != nil {
 		return nil, err
 	}
@@ -44,8 +57,13 @@ func (db *DataBase) GetNdesabafos(n int) ([]desabafoDb, error) {
 
 	for rows.Next() {
 		var d desabafoDb
-		rows.Scan(&d.Id, &d.Texto, &d.Created_at)
+		if err := rows.Scan(&d.Id, &d.Texto, &d.Created_at); err != nil {
+			return nil, err
+		}
 		result = append(result, d)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
 	}
 	return result, nil
 

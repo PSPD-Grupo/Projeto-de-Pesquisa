@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Desabafo(
-    id INT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     created_at timestamp,
     texto TEXT
 );
