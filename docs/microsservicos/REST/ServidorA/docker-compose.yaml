@@ -1,0 +1,14 @@
+services:
+  servidor-a-rest:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "6789:6789"
+    volumes:
+      - ./db:/app/db   # espelha a pasta db/ do host para /app/db no container
+    env_file:
+      - .env
+    environment:
+      - ROOT=/app/
+    restart: unless-stopped
