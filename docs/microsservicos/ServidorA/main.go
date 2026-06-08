@@ -1,6 +1,7 @@
-package ServidorA
+package main
 
 import (
+	"ServidorA/gen/chat"
 	"ServidorA/gen/desabafo"
 	"ServidorA/internal/connection"
 	"ServidorA/internal/persistence"
@@ -33,6 +34,7 @@ func main() {
 	}
 	s := grpc.NewServer()
 	desabafo.RegisterFeedServer(s, &connection.FeedServer{})
+	chat.RegisterChatServiceServer(s, &connection.ChatServer{})
 
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
