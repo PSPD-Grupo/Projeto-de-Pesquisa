@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
@@ -20,9 +21,8 @@ var (
 
 func main() {
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	if os.Getenv("ROOT") == "" {
+		godotenv.Load() // só carrega o .env se a var ainda não estiver definida
 	}
 
 	persistence.StartDataBase()
