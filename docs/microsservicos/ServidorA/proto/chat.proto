@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package chat;
+option go_package = "gen/chat;chat";
+
+
+service ChatService {
+  // Bidirectional streaming: client and server both send messages freely.
+  rpc Chat(stream ChatMessage) returns (stream ChatMessage);
+}
+
+message ChatMessage {
+    string message_id = 1;
+    string text = 2;
+    string room_id =3;
+    string sender_nickname=4;
+    int64 send_at =5;
+}
+
+
+
+
