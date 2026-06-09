@@ -1,25 +1,54 @@
 # Maven
 target/
+dependency-reduced-pom.xml
 
-# IntelliJ
-.idea/
-*.iml
-
-# VS Code
-.vscode/
-
-# Logs
-*.log
-
-# Linux
-.DS_Store
-Thumbs.db
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+**/go-cache/
+**/bin/
+**/dist/
 
 # Python
 venv/
 .venv/
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
 
-dependency-reduced-pom.xml
+# Node (se houver builds locais)
+node_modules/
 
-**/go-cache/
+# MkDocs
+site/
+
+# IntelliJ / VS Code
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# Logs
+*.log
+
+# OS files (macOS, Linux, Windows)
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Configurações locais / Credenciais
+.env
+.env.local
+.env.*.local
+!.env.example
