@@ -1,0 +1,14 @@
+services:
+  servidor-b:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "50052:50052"
+    volumes:
+      - ./db:/app/db   #
+    env_file:
+      - .env
+    environment:
+      - ROOT=/app/
+    restart: unless-stopped
