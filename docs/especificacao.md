@@ -67,14 +67,92 @@ Construir uma aplicação distribuída baseada em **microserviços gRPC** e faze
 
 ---
 
-## Arquivo `.proto` do projeto
+## Arquivos `.proto` do projeto
 
-```protobuf
-//colocar o .proto aqui
-```
+=== "desabafo.proto (Servidor A — Desabafos)"
+
+    ```protobuf
+    syntax = "proto3";
+
+    package desabafo;
+    option go_package = "gen/desabafo;desabafo";
+
+    service Feed {
+        rpc PostDesabafo(RascunhoDesabafo) returns (Desabafo);
+        rpc GetFeed(FeedRequest) returns (stream Desabafo);
+    }
+
+    message FeedRequest {
+        int64 quant =1;
+    }
+
+    message RascunhoDesabafo {
+        string texto=1;
+    }
+
+    message Desabafo {
+        string texto=1;
+        int32 id =2;
+        int64 created_at = 3;
+    }
+    ```
+
+=== "chat.proto (Servidor A — Sala ao Vivo)"
+
+    ```protobuf
+    syntax = "proto3";
+
+    package chat;
+    option go_package = "gen/chat;chat";
+
+    service ChatService {
+      // Bidirectional streaming: client and server both send messages freely.
+      rpc Chat(stream ChatMessage) returns (stream ChatMessage);
+    }
+
+    message ChatMessage {
+        string message_id = 1;
+        string text = 2;
+        string room_id =3;
+        string sender_nickname=4;
+        int64 send_at =5;
+    }
+    ```
+
+=== "reacoes.proto (Servidor B — Reações)"
+
+    ```protobuf
+    syntax = "proto3";
+
+    package reacoes;
+
+    option java_multiple_files = true;
+
+    message ReacaoRequest {
+      string desabafo_id = 1;
+    }
+
+    message ResumoReacoes {
+      int32 total = 1;
+    }
+
+    message ReacaoConsulta {
+      string desabafo_id = 1;
+    }
+
+    message ReacaoResposta {
+      int32 quantidade = 1;
+    }
+
+    service ReacaoService {
+      rpc EnviarReacoes(stream ReacaoRequest) returns (ResumoReacoes);
+      rpc BuscarReacoes(ReacaoConsulta) returns (ReacaoResposta);
+    }
+    ```
 
 ## Histórico de Versão
 | Versão | Data       | Descrição                                      | Autor               | Revisor               |
 |--------|------------|------------------------------------------------|---------------------|-----------------------|
 | 1.0    | 04/06/2026 | Primeira versão do artefato grpc | [Milena Baruc Rodrigues Morais](https://github.com/MilenaBaruc) | [Milena Baruc Rodrigues Morais](https://github.com/MilenaBaruc) |
 | 1.1    | 06/06/2026 | Atualizando Imagens | [Gabriel Freitas Balbino](https://github.com/gabrielfreitass1) | [Gabriel Freitas Balbino](https://github.com/gabrielfreitass1) |
+| 1.2    | 08/06/2026 | Atualizando .proto | [Milena Baruc Rodrigues Morais](https://github.com/MilenaBaruc) | [Milena Baruc Rodrigues Morais](https://github.com/MilenaBaruc) |
