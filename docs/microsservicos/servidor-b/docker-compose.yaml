@@ -3,12 +3,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: servidor_b
     ports:
       - "50052:50052"
-    volumes:
-      - ./db:/app/db   #
-    env_file:
-      - .env
     environment:
-      - ROOT=/app/
+      - SPRING_PROFILES_ACTIVE=dev
     restart: unless-stopped
+      
