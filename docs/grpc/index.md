@@ -13,11 +13,11 @@ Uma das maiores vantagens do RPC é que pouco importam os detalhes da rede. Como
 <div align="center">
 <font size="3"><p style="text-align: center"><b>Figura 1:</b> Exemplo de Comunicação com RPC síncrono</p></font>
 
-![RPC síncrono](../img/sync.png)
+<img src="../img/sync.png" alt="RPC síncrono" style="max-width: 100%; height: auto;">
 
 <font size="3"><p style="text-align: center"><b>Figura 2:</b> Exemplo de Comunicação com RPC assíncrono</p></font>
 
-![RPC assíncrono](../img/assync.png)
+<img src="../img/assync.png" alt="RPC assíncrono" style="max-width: 100%; height: auto;">
 
 <font size="3"><p style="text-align: center"><b>Autor:</b> Tanenbaum e Steen, 2007.</p></font>
 </div>
@@ -52,7 +52,7 @@ No HTTP/1.1, a comunicação costuma usar texto plano, criando pacotes de dados 
 <div align="center">
 <font size="3"><p style="text-align: center"><b>Figura 3:</b> Exemplo de Comunicação com gRPC</p></font>
 
-![Imagem 3](../img/diagramagRPC.jpg)
+<img src="../img/diagramagRPC.jpg" alt="Exemplo de Comunicação com gRPC" style="max-width: 100%; height: auto;">
 
 <font size="3"><p style="text-align: center"><b>Autor:</b> <a href="https://github.com/gabrielfreitass1">Gabriel Freitas</a>, 2026.</p></font> 
 </div>

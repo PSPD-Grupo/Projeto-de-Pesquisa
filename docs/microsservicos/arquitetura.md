@@ -7,7 +7,7 @@ A aplicação segue a arquitetura definida pelo professor: um **frontend HTTP** 
 <div align="center">
 <font size="3"><p style="text-align: center"><b>Figura 1:</b> Arquitetura de Comunicação do projeto</p></font>
 
-![Imagem 1](../img/arquitetura.jpg)
+<img src="../img/arquitetura.jpg" alt="Arquitetura de Comunicação" style="max-width: 100%; height: auto;">
 
 <font size="3"><p style="text-align: center"><b>Autor:</b> <a href="https://github.com/gabrielfreitass1">Gabriel Freitas</a>, 2026.</p></font> 
 </div>
