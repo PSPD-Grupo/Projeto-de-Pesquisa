@@ -61,7 +61,7 @@ A aplicação escolhida é o **Desabafo**, um diário anônimo distribuído onde
 ---
 
 ## Instação de Dependencias
-**Linguagens:** Java, Go <br>
+**Linguagens:** Java, Go, python <br>
 **Frameworks:**  gRPC, Kubernets <br>
 
 ```bash

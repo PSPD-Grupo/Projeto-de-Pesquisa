@@ -62,4 +62,6 @@ nav:
       - Nossa Aplicação: microsservicos/index.md
       - Arquitetura: microsservicos/arquitetura.md
       - Funcionalidades Planejadas: microsservicos/diario-desabafo.md
+  - Kubernetes:
+      - Sobre: kubernetes/kubernetes.md   
   - Sobre o Grupo: sobre.md
