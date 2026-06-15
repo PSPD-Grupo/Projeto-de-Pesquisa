@@ -1,4 +1,4 @@
-const API_BASE = '/api';
+const API_BASE = 'http://192.168.49.2:30628';
 let currentNickname = '';
 let currentRoom = '';
 let chatSocket = null;
