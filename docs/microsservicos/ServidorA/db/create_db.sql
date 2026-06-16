@@ -1,6 +1,6 @@
-CREATE TABLE IF NOT EXISTS Desabafo(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    created_at timestamp,
+CREATE TABLE IF NOT EXISTS desabafo(
+    id INTEGER PRIMARY KEY,
+    created_at INTEGER,
     texto TEXT
 );
 

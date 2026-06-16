@@ -1,0 +1,37 @@
+{
+  "metrics": {
+    "rest_publicar_ms": {
+      "values": {
+        "avg": 38.60,
+        "p(95)": 68.20
+      }
+    },
+    "rest_feed_ms": {
+      "values": {
+        "avg": 55.40,
+        "p(95)": 94.10
+      }
+    },
+    "rest_reagir_ms": {
+      "values": {
+        "avg": 27.90,
+        "p(95)": 49.50
+      }
+    },
+    "http_req_duration": {
+      "values": {
+        "avg": 40.63
+      }
+    },
+    "http_reqs": {
+      "values": {
+        "rate": 285.20
+      }
+    },
+    "http_req_failed": {
+      "values": {
+        "rate": 0.0
+      }
+    }
+  }
+}

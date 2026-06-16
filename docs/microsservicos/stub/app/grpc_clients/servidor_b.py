@@ -18,3 +18,16 @@ class ReacaoClient:
                 "desabafo_id": desabafo_id,
                 "quantidade": response.quantidade,
             }
+
+    def reagir(self, desabafo_id: str) -> dict:
+        with grpc.insecure_channel(self.target) as channel:
+            stub = reacoes_pb2_grpc.ReacaoServiceStub(channel)
+            
+            def request_generator():
+                yield reacoes_pb2.ReacaoRequest(desabafo_id=desabafo_id)
+                
+            response = stub.EnviarReacoes(request_generator())
+            return {
+                "desabafo_id": desabafo_id,
+                "total": response.total,
+            }

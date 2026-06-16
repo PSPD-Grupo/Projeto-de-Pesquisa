@@ -22,11 +22,24 @@ class FeedClient:
         with grpc.insecure_channel(self.target) as channel:
             stub = desabafo_pb2_grpc.FeedStub(channel)
             stream = stub.GetFeed(desabafo_pb2.FeedRequest(quant=quant))
-            return [
-                {
+            
+            # Decorate with reactions from Servidor B
+            from app.grpc_clients.servidor_b import ReacaoClient
+            reacao_client = ReacaoClient()
+            
+            items = []
+            for item in stream:
+                try:
+                    reactions_data = reacao_client.buscar_reacoes(str(item.id))
+                    reactions_count = reactions_data.get("quantidade", 0)
+                except Exception as e:
+                    print(f"Error fetching reactions for desabafo {item.id}: {e}")
+                    reactions_count = 0
+                
+                items.append({
                     "id": item.id,
                     "texto": item.texto,
                     "created_at": item.created_at,
-                }
-                for item in stream
-            ]
+                    "reactions": reactions_count,
+                })
+            return items

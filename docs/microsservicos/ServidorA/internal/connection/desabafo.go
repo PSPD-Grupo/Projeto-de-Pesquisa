@@ -13,6 +13,8 @@ type FeedServer struct {
 }
 
 func (fs *FeedServer) PostDesabafo(_ context.Context, in *desabafo.RascunhoDesabafo) (*desabafo.Desabafo, error) {
+	
+	
 	novo_desabafo := persistence.NewDesabafoDb(in.Texto)
 	err := novo_desabafo.Insert()
 	if err != nil {
@@ -26,6 +28,7 @@ func (fs *FeedServer) PostDesabafo(_ context.Context, in *desabafo.RascunhoDesab
 	}
 	return &retorno, nil
 }
+
 
 func (fs *FeedServer) GetFeed(fr *desabafo.FeedRequest, stream desabafo.Feed_GetFeedServer) error {
 	desabafos, err := persistence.Db.GetNdesabafos(int(fr.Quant))
@@ -47,3 +50,5 @@ func (fs *FeedServer) GetFeed(fr *desabafo.FeedRequest, stream desabafo.Feed_Get
 	}
 	return nil
 }
+
+
