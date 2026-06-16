@@ -53,10 +53,9 @@ O projeto envolve dois objetivos principais:
 A aplicação escolhida é o **Desabafo**, um diário anônimo distribuído onde usuários podem publicar textos curtos, ver um feed e interagir em tempo real.
 
 --- 
+
 ## Screenshots Do Trabalho
-![Imagem 1]()<br>
-
-
+![Imagem 1](Imagem1.png)<br>
 
 ---
 
