@@ -1,6 +1,7 @@
 package persistence
 
 import (
+	"fmt"
 	"log"
 	"time"
 )
@@ -54,37 +55,40 @@ func (db *DataBase) GetNdesabafos(n int) ([]desabafoDb, error) {
 		}
 	}
 	if !isNoDB {
-		log.Printf("n: %d", n)
-		rows, err := db.db.Query(`
+		log.Printf("Executing Query for n = %d", n)
+		rows, err := db.db.Query(fmt.Sprintf(`
 			SELECT id, texto, created_at
-			FROM Desabafo
+			FROM desabafo
 			ORDER BY created_at DESC
-			LIMIT ?;
-		`, n)
+			LIMIT %d;
+		`, n))
 		if err != nil {
 			log.Printf("erro na query: %v", err)
 			return nil, err
 		}
 		defer rows.Close()
+		
+		count := 0
 		for rows.Next() {
-		var d desabafoDb
+			count++
+			var d desabafoDb
+			err := rows.Scan(
+				&d.Id,
+				&d.Texto,
+				&d.Created_at,
+			)
+			if err != nil {
+				log.Printf("erro no scan em linha %d: %v", count, err)
+				return nil, err
+			}
+			result = append(result, d)
+		}
+		log.Printf("Query loop finished. Scanned %d rows.", count)
 
-		err := rows.Scan(
-			&d.Id,
-			&d.Texto,
-			&d.Created_at,
-		)
-		if err != nil {
-			log.Printf("erro no scan: %v", err)
+		if err := rows.Err(); err != nil {
+			log.Printf("rows.Err() erro detectado: %v", err)
 			return nil, err
 		}
-
-		result = append(result, d)
-	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
 	}
 
 	return result, nil

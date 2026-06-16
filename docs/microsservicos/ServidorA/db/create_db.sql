@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS desabafo(
     id INTEGER PRIMARY KEY,
-    created_at timestamp,
+    created_at INTEGER,
     texto TEXT
 );
 

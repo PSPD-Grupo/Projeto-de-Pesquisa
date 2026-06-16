@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	_ "github.com/glebarez/go-sqlite"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type DataBaseInterface interface {
@@ -25,15 +25,18 @@ type DataBase struct {
 	no_db map[int64]desabafoDb
 	cont int
 }
-var isNoDB bool = true
+var isNoDB bool = false
 var Db DataBaseInterface
 
 func StartDataBase() {
 	var err error
 
 	exPath := os.Getenv("ROOT")
+	if exPath == "" {
+		exPath = "."
+	}
 
-	conn, err := sql.Open("sqlite", "file:"+exPath+"/db/db.sqlite3?_foreign_keys=on&_busy_timeout=5000")
+	conn, err := sql.Open("sqlite3", exPath+"/db/db.sqlite3")
 	if err != nil {
 		fmt.Println(err)
 		return

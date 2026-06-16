@@ -3,19 +3,20 @@ package connection
 import (
 	"ServidorA/gen/chat"
 	"log"
+	"sync"
 
 	"google.golang.org/grpc"
 )
 
 type ChatServer struct {
 	chat.UnimplementedChatServiceServer
-	salas map[string]room
+	mu    sync.Mutex
+	salas map[string]*room
 }
 
 type room struct {
-	id        string
-	Clientes  map[string]cliente
-	broadcast chan *chat.ChatMessage
+	id       string
+	Clientes map[string]cliente
 }
 
 type cliente struct {
@@ -24,10 +25,26 @@ type cliente struct {
 	stream   grpc.BidiStreamingServer[chat.ChatMessage, chat.ChatMessage]
 }
 
-func (s *ChatServer) Chat(stream grpc.BidiStreamingServer[chat.ChatMessage, chat.ChatMessage]) error {
-	// Canal interno para erros do goroutine de recebimento
-	errCh := make(chan error, 1)
+func (s *ChatServer) broadcast(roomId string, msg *chat.ChatMessage) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
+	r, ok := s.salas[roomId]
+	if !ok {
+		return
+	}
+
+	for _, client := range r.Clientes {
+		go func(c cliente, m *chat.ChatMessage) {
+			if err := c.stream.Send(m); err != nil {
+				log.Printf("erro ao enviar mensagem para %s: %v", c.nickname, err)
+			}
+		}(client, msg)
+	}
+}
+
+func (s *ChatServer) Chat(stream grpc.BidiStreamingServer[chat.ChatMessage, chat.ChatMessage]) error {
+	// Recebe a primeira mensagem para identificar o cliente e a sala
 	firstMsg, err := stream.Recv()
 	if err != nil {
 		return err
@@ -36,52 +53,47 @@ func (s *ChatServer) Chat(stream grpc.BidiStreamingServer[chat.ChatMessage, chat
 	roomId := firstMsg.RoomId
 	clienteId := firstMsg.SenderNickname
 
-	// Registra o cliente na sala
-	s.salas[roomId].Clientes[clienteId] = cliente{
-		nickname: firstMsg.SenderNickname,
+	s.mu.Lock()
+	if s.salas == nil {
+		s.salas = make(map[string]*room)
+	}
+	r, ok := s.salas[roomId]
+	if !ok {
+		r = &room{
+			id:       roomId,
+			Clientes: make(map[string]cliente),
+		}
+		s.salas[roomId] = r
+	}
+	r.Clientes[clienteId] = cliente{
+		nickname: clienteId,
 		room_id:  roomId,
 		stream:   stream,
 	}
-	broadcast := s.salas[roomId].broadcast
+	s.mu.Unlock()
 
 	log.Printf("cliente %s entrou na sala %s", clienteId, roomId)
-
-	// Processa a primeira mensagem normalmente
-	broadcast <- firstMsg
-
-	// ── Goroutine de RECEBIMENTO (cliente → servidor) ──
-	go func() {
-		for {
-			msg, err := stream.Recv()
-			if err != nil {
-				errCh <- err
-				return
-			}
-
-			log.Printf("mensagem recebida de %s: %s", msg.SenderNickname, msg.Text)
-			s.salas[msg.RoomId].broadcast <- msg
-		}
-	}()
+	s.broadcast(roomId, firstMsg)
 
 	defer func() {
-		// Remove o cliente da sala ao desconectar
-		delete(s.salas[roomId].Clientes, clienteId)
+		s.mu.Lock()
+		if r, ok := s.salas[roomId]; ok {
+			delete(r.Clientes, clienteId)
+			if len(r.Clientes) == 0 {
+				delete(s.salas, roomId)
+			}
+		}
+		s.mu.Unlock()
 		log.Printf("cliente %s saiu da sala %s", clienteId, roomId)
 	}()
 
-	// ── Loop de ENVIO (servidor → cliente) ──
 	for {
-		select {
-		case err = <-errCh:
-			// Cliente desconectou ou erro no recebimento
-			log.Println("stream encerrado:", err)
+		msg, err := stream.Recv()
+		if err != nil {
+			log.Printf("stream do cliente %s encerrado: %v", clienteId, err)
 			return err
-
-		case msg := <-broadcast:
-			if err = stream.Send(msg); err != nil {
-				log.Println("erro ao enviar:", err)
-				return err
-			}
 		}
+		log.Printf("mensagem recebida de %s na sala %s: %s", msg.SenderNickname, msg.RoomId, msg.Text)
+		s.broadcast(msg.RoomId, msg)
 	}
 }
