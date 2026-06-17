@@ -74,25 +74,19 @@ Esta seção reúne o relato individual de cada membro do grupo sobre sua partic
 - Configurar o `pom.xml` para integração correta entre o plugin Protobuf, o compilador `protoc` e o Maven Shade Plugin, lidando com detalhes como a necessidade do `os-maven-plugin` para detecção de plataforma e o risco de colisão de arquivos SPI do Netty durante o empacotamento.
 - Compreender e aplicar corretamente os mecanismos de concorrência, partindo apenas da base teórica vista em aula e chegando a uma implementação que garante segurança de dados sob carga paralela real.
 
-
-### O que fiz
-*(A preencher)*
-
-### O que aprendi
-*(A preencher)*
-
-### Dificuldades superadas
-*(A preencher)*
-
 ---
 
 ## 👨‍💻 Gabriel Freitas Balbino
 
 ### O que fiz
-*(A preencher)*
-
-### O que aprendi
-*(A preencher)*
-
+- Server stub para conectar os Serviços A de desabafos e chat feito em GO, com o servidor B de reacts feito em Java. Esse servidor foi desenvolvido em Python com FastAPI.
+- Ajuda na documentação com atualização de alguns textos e transformação de alguns desenhos feitos no bash em diagramas em .png para melhor visualização. Aqui foi necessarrio entender como o gRPC e o o protobuff funcionavam para realização dessa parte, compreender como funcionava a comunicação entre os serviços e as diferentes linguagens.
+- Transporte do nosso serviço para o Kubernetes com o Minikube.
+### O que aprendi.
+- Conceitos de microserviços com gRPC, entender como eles funcionam foi fundamental para fazer a api funcionar. 
+- Conteinerização e orquestração de aplicações utilizando Docker e Kubernetes, incluindo deploy de serviços, gerenciamento de pods e exposição de aplicações.
+- Integração de diferentes tecnologias.
 ### Dificuldades superadas
-*(A preencher)*
+- Apesar de o Minikube ter configurações bem simples, eu e o Pedro encontramos diversos problemas ao transportar o Serviço A para ca. Tive problemas ao gerar a imagem desse serviço, e mesmo com o serviço rodando localmente e o conteiner dele estando pronto, ao subir para o Minikube ele encontrava alguns erros, ate mesmo depois de upado tivemos um serio problema com o banco de dados que estava colando NULL's em chaves primarias e nao estava conseguindo retornar os valores corretos pelas requests.
+
+- Entender que bons arquivos de configuração YAML, evitam bastantes problemas.
