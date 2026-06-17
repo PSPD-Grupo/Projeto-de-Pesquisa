@@ -1,0 +1,12 @@
+services:
+  servidor-b:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: servidor_b
+    ports:
+      - "50052:50052"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    restart: unless-stopped
+      

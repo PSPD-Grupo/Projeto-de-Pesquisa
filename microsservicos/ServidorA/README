@@ -1,0 +1,65 @@
+# ServidorA
+
+Servidor Grpc em Go com duas funcionalidades independentes: **desabafo anônimo** e **chat em tempo real**.
+
+---
+
+## Funcionalidades
+
+### Desabafo
+Permite que qualquer pessoa publique um texto anônimo livremente, sem identificação. Os posts são armazenados em um banco SQLite e podem ser consultados como um feed.
+
+### Chat
+Chat em tempo real entre usuários organizados em salas.
+
+---
+
+## Como rodar
+
+### Com `go run`
+
+**Pré-requisitos:** Go 1.24+
+
+```bash
+git clone <repo>
+cd docs/microsservicos/ServidorA
+go mod download
+go run main.go
+```
+
+O servidor sobe em `http://localhost:50051`.
+
+### Com Docker
+
+**Pré-requisitos:** Docker e Docker Compose
+
+```bash
+docker compose up --build
+```
+
+Para rodar em background:
+```bash
+docker compose up --build -d
+```
+
+O servidor sobe em `http://localhost:6789`.
+
+> O banco SQLite é persistido na pasta `./data` do host via volume, então os dados sobrevivem a reinicializações do container.
+
+---
+
+## Estrutura do projeto
+
+```
+ServidorA/
+├── main.go
+├── internal/
+│   ├── connections/
+│   │   ├── chat.go          # Handler WebSocket do chat
+│   │   └── desabafo.go      # Handlers HTTP do desabafo
+│   └── persistence/
+│       ├── persistencia.go  # Conexão com o banco
+│       └── desabafo.go      # Modelo e queries
+├── Dockerfile
+└── docker-compose.yml
+```

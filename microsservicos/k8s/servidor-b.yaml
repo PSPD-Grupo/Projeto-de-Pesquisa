@@ -1,0 +1,94 @@
+# ──────────────────────────────────────────────────────────────
+# Deployment — servidor-b
+#
+# Um Deployment diz ao Kubernetes: "mantenha 1 réplica deste
+# container rodando, sempre". Se o pod morrer, o K8s recria.
+# ──────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servidor-b
+  labels:
+    app: servidor-b
+spec:
+  replicas: 1
+
+  # O selector conecta este Deployment aos pods que ele gerencia.
+  # Deve coincidir com template.metadata.labels abaixo.
+  selector:
+    matchLabels:
+      app: servidor-b
+
+  template:
+    metadata:
+      labels:
+        app: servidor-b
+    spec:
+      containers:
+        - name: servidor-b
+          image: servidor-b-servidor-b:latest
+
+          # Never: usa apenas imagens já presentes no node (minikube local).
+          # Sem isso, o K8s tentaria baixar do Docker Hub e falharia.
+          # Lembre de rodar: eval $(minikube docker-env) antes do docker build.
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 50052
+              name: grpc
+
+          # Limites de recursos: garante que o container não consuma
+          # mais do que o definido, protegendo os outros pods.
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"     # 100 millicores = 0.1 CPU
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+
+          # Liveness probe: o K8s verifica periodicamente se o container
+          # está vivo. Se falhar N vezes seguidas, reinicia o pod.
+          # Usamos o grpc-health-probe, que faz uma chamada gRPC de health check.
+          # Alternativa simples: TCP check na porta 50052.
+          livenessProbe:
+            tcpSocket:
+              port: 50052
+            initialDelaySeconds: 10   # aguarda 10s antes da primeira checagem
+            periodSeconds: 15         # checa a cada 15s
+
+          # Readiness probe: o K8s só manda tráfego para o pod quando
+          # esse probe retorna sucesso. Evita requisições para pods
+          # que ainda estão inicializando.
+          readinessProbe:
+            tcpSocket:
+              port: 50052
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+---
+# ──────────────────────────────────────────────────────────────
+# Service — servidor-b
+#
+# Um Service cria um endereço DNS estável dentro do cluster.
+# Sem ele, o pod teria um IP dinâmico que muda a cada reinício.
+# Com ele, o módulo P pode sempre chamar "servidor-b:50052".
+#
+# type: ClusterIP → acessível APENAS de dentro do cluster.
+# O servidor B nunca deve ser exposto externamente — só P o acessa.
+# ──────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: servidor-b
+  labels:
+    app: servidor-b
+spec:
+  type: ClusterIP
+  selector:
+    app: servidor-b   # encaminha tráfego para pods com este label
+  ports:
+    - port: 50052         # porta do Service (usada por outros pods para chamar)
+      targetPort: 50052   # porta do container
+      protocol: TCP
+      name: grpc

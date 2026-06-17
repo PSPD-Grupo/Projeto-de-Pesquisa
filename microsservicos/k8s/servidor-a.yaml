@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servidor-a
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: servidor-a
+  template:
+    metadata:
+      labels:
+        app: servidor-a
+    spec:
+      containers:
+      - name: servidor-a
+        image: servidora-servidor-a:latest
+        imagePullPolicy: Never
+
+        env:
+        - name: ROOT
+          value: "/app"
+        ports:
+        - containerPort: 50051
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servidor-a
+spec:
+  type: ClusterIP
+  selector:
+    app: servidor-a
+  ports:
+  - port: 50051
+    targetPort: 50051

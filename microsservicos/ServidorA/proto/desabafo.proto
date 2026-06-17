@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package desabafo;
+option go_package = "gen/desabafo;desabafo";
+
+service Feed {
+    rpc PostDesabafo(RascunhoDesabafo) returns (Desabafo);
+    rpc GetFeed(FeedRequest) returns (stream Desabafo);
+}
+
+message FeedRequest {
+    int64 quant =1;
+}
+
+message RascunhoDesabafo {
+    string texto=1;
+}
+
+message Desabafo {
+    string texto=1;
+    int32 id =2;
+    int64 created_at = 3;
+}

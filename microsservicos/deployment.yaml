@@ -1,0 +1,113 @@
+# ─────────────────────────────────────────
+# SERVIDOR-A
+# ─────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servidor-a
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: servidor-a
+  template:
+    metadata:
+      labels:
+        app: servidor-a
+    spec:
+      containers:
+        - name: servidor-a
+          image: servidora-servidor-a:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 50051
+          env:
+            - name: ROOT
+              value: "/app"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servidor-a
+spec:
+  selector:
+    app: servidor-a
+  ports:
+    - port: 50051
+      targetPort: 50051
+---
+# ─────────────────────────────────────────
+# SERVIDOR-B
+# ─────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servidor-b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: servidor-b
+  template:
+    metadata:
+      labels:
+        app: servidor-b
+    spec:
+      containers:
+        - name: servidor-b
+          image: servidor-b-servidor-b:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servidor-b
+spec:
+  selector:
+    app: servidor-b
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+# ─────────────────────────────────────────
+# STUB — chama servidor-a e servidor-b
+# ─────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stub
+  template:
+    metadata:
+      labels:
+        app: stub
+    spec:
+      containers:
+        - name: stub
+          image: stub-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SERVIDOR_A_URL
+              value: "http://servidor-a:50051"
+            - name: SERVIDOR_B_URL
+              value: "http://servidor-b:8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stub
+spec:
+  selector:
+    app: stub
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: NodePort

@@ -1,0 +1,76 @@
+# ──────────────────────────────────────────────────────────────
+# Deployment — servidor-b (REST/JSON)
+# ──────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servidor-b
+  labels:
+    app: servidor-b
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: servidor-b
+
+  template:
+    metadata:
+      labels:
+        app: servidor-b
+    spec:
+      containers:
+        - name: servidor-b
+          image: servidor-b:latest
+          imagePullPolicy: Never   # imagem local do minikube
+
+          ports:
+            - containerPort: 8080
+              name: http
+
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+
+          # Liveness: verifica se o servidor HTTP responde
+          livenessProbe:
+            httpGet:
+              path: /reacoes/buscar?desabafo_id=health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
+
+          # Readiness: só envia tráfego quando o servidor estiver pronto
+          readinessProbe:
+            httpGet:
+              path: /reacoes/buscar?desabafo_id=health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+---
+# ──────────────────────────────────────────────────────────────
+# Service — servidor-b (REST/JSON)
+#
+# ClusterIP: acessível apenas de dentro do cluster.
+# Outros pods chamam: http://servidor-b:8080/reacoes/...
+# ──────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: servidor-b
+  labels:
+    app: servidor-b
+spec:
+  type: ClusterIP
+  selector:
+    app: servidor-b
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http

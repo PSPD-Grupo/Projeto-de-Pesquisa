@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desabafo 🗒️ — Diário Anônimo Distribuído</title>
+    <meta name="description" content="Um diário anônimo distribuído construído com gRPC e Kubernetes. Publique desabafos, curta e interaja em tempo real.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo-area">
+                <i class="fa-solid fa-note-sticky logo-icon"></i>
+                <div>
+                    <h1>Desabafo <span class="badge">PSPD</span></h1>
+                    <p class="subtitle">Diário anônimo distribuído · UnB/FCTE</p>
+                </div>
+            </div>
+            <div class="header-status">
+                <span class="status-indicator online"></span>
+                <span>Gateway Ativo</span>
+            </div>
+        </header>
+
+        <main class="app-grid">
+            <section class="left-column">
+                <div class="glass-card publish-card animate-fade-in">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-pen-nib text-gradient"></i> Novo Desabafo</h2>
+                        <span class="desc-tag">100% Anônimo</span>
+                    </div>
+                    
+                    <form id="publish-form">
+                        <div class="textarea-wrapper">
+                            <textarea 
+                                id="desabafo-text" 
+                                placeholder="O que está na sua mente agora? Solte o peso desse sentimento..." 
+                                maxlength="280"
+                                required
+                            ></textarea>
+                            <div class="char-counter">
+                                <span id="char-count">0</span>/280
+                            </div>
+                        </div>
+                        
+                        <button type="submit" id="btn-publish" class="btn btn-primary btn-block">
+                            <span>Publicar</span>
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="glass-card chat-card animate-fade-in delay-1">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-comments text-gradient"></i> Sala ao Vivo</h2>
+                        <span class="desc-tag bg-live" id="chat-status">Desconectado</span>
+                    </div>
+                    
+                    <div id="chat-join-view" class="chat-view-container">
+                        <p class="chat-intro-text">
+                            Entre em uma sala de bate-papo bidirecional em tempo real para interagir com outros anônimos.
+                        </p>
+                        
+                        <div class="form-group">
+                            <label for="chat-nickname"><i class="fa-solid fa-user-secret"></i> Seu Apelido</label>
+                            <input 
+                                type="text" 
+                                id="chat-nickname" 
+                                placeholder="Ex: Anonimo_4821" 
+                                maxlength="15"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="chat-room-select"><i class="fa-solid fa-hashtag"></i> Sala</label>
+                            <select id="chat-room-select">
+                                <option value="sala-geral">Sala Geral 🌍</option>
+                                <option value="sala-acolhimento">Sala de Acolhimento ☕</option>
+                                <option value="sala-desabafos">Desabafos Rápidos ⚡</option>
+                            </select>
+                        </div>
+                        
+                        <button id="btn-join-chat" class="btn btn-secondary btn-block">
+                            <span>Entrar na Sala</span>
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                        </button>
+                    </div>
+
+                    <div id="chat-active-view" class="chat-view-container hidden">
+                        <div class="chat-header-info">
+                            <span id="chat-current-room">#sala-geral</span>
+                            <button id="btn-leave-chat" class="btn-icon-close" title="Sair da sala">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        
+                        <div id="chat-messages-container" class="chat-messages"></div>
+                        
+                        <form id="chat-input-form" class="chat-input-area">
+                            <input 
+                                type="text" 
+                                id="chat-message-text" 
+                                placeholder="Digite sua mensagem ao vivo..." 
+                                autocomplete="off"
+                                required
+                            >
+                            <button type="submit" class="btn-send">
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <section class="right-column">
+                <div class="feed-header animate-fade-in">
+                    <div class="feed-title">
+                        <h2><i class="fa-solid fa-fire text-gradient"></i> Mural de Desabafos</h2>
+                        <p id="feed-stat">Carregando desabafos...</p>
+                    </div>
+                    <button id="btn-refresh" class="btn-circle" title="Atualizar feed">
+                        <i class="fa-solid fa-arrows-rotate" id="refresh-icon"></i>
+                    </button>
+                </div>
+
+                <div id="feed-container" class="feed-list"></div>
+            </section>
+        </main>
+
+        <footer class="app-footer">
+            <p>Projeto de Programação para Sistemas Paralelos e Distribuídos (PSPD) · UnB/FCTE</p>
+            <div class="authors">
+                <span>Milena Morais</span> · <span>Pedro Cruz</span> · <span>Daniel Sousa</span> · <span>Gabriel Balbino</span>
+            </div>
+        </footer>
+    </div>
+
+    <div id="hearts-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

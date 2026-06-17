@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package reacoes;
+
+option java_multiple_files = true;
+
+message ReacaoRequest {
+  string desabafo_id = 1;
+}
+
+message ResumoReacoes {
+  int32 total = 1;
+}
+
+message ReacaoConsulta {
+  string desabafo_id = 1;
+}
+
+message ReacaoResposta {
+  int32 quantidade = 1;
+}
+
+service ReacaoService {
+
+  rpc EnviarReacoes(stream ReacaoRequest)
+      returns (ResumoReacoes);
+
+  rpc BuscarReacoes(ReacaoConsulta)
+      returns (ReacaoResposta);
+}
