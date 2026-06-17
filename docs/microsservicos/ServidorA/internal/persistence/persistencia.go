@@ -25,7 +25,7 @@ type DataBase struct {
 	no_db map[int64]desabafoDb
 	cont int
 }
-var isNoDB bool = false
+var isNoDB bool = true
 var Db DataBaseInterface
 
 func StartDataBase() {
