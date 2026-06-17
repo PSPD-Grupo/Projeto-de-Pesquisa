@@ -27,15 +27,31 @@ Esta seção reúne o relato individual de cada membro do grupo sobre sua partic
 ---
 
 ## 👨‍💻 Pedro Fonseca Cruz
+## O que fiz
 
-### O que fiz
-*(A preencher)*
+* **Implementação do Servidor A:** desenvolvi em Go o Servidor A, seguindo o planejamento descrito na documentação do projeto.
 
-### O que aprendi
-*(A preencher)*
+  * **Chat:** serviço bidirecional com múltiplas salas e suporte a clientes concorrentes.
+  * **Post de Desabafo:** publicação de desabafos anônimos com persistência real em SQLite3.
+  * **Feed:** implementação de um feed em streaming para distribuição dos desabafos já publicados.
 
-### Dificuldades superadas
-*(A preencher)*
+* **Docker:** realizei a conteinerização da aplicação utilizando Dockerfile e Docker Compose.
+
+* **Deploy em Kubernetes:** em conjunto com o Gabriel, participei da configuração e resolução dos principais problemas relacionados ao deploy da aplicação em Kubernetes.
+
+## O que aprendi
+
+* Aprendi o quanto gRPC e Protocol Buffers são ferramentas poderosas para comunicação entre serviços. Apesar de algumas limitações, como a integração direta com navegadores, a experiência de comunicação entre servidores é significativamente melhor do que em arquiteturas baseadas em REST.
+
+* Gostei especialmente da abordagem dos contratos de comunicação definidos pelo Protocol Buffers. Isso me lembrou o TypeScript, onde os tipos são explicitamente declarados. Embora possa parecer mais restritivo à primeira vista, essa formalização reduz ambiguidades e torna o desenvolvimento mais previsível e seguro.
+
+* Também aprendi bastante sobre Kubernetes. A plataforma simplifica diversos aspectos da infraestrutura; por exemplo, a comunicação entre microsserviços por DNS funcionou praticamente de forma automática. Foi uma oportunidade valiosa para entender melhor conceitos de orquestração e deploy.
+
+## Dificuldades superadas
+
+* A conveniência oferecida pelo Kubernetes tem como contrapartida uma camada adicional de complexidade. Enfrentamos diversos problemas de configuração durante o deploy, principalmente porque o Kubernetes possui comportamentos e abstrações que não existem em um ambiente Docker simples. Em várias ocasiões, uma imagem funcionava perfeitamente em um container local, mas apresentava problemas quando executada em um Pod. A solução exigiu estudo detalhado da documentação e dos arquivos YAML de configuração.
+
+* Também tive dificuldades para testar de forma abrangente as chamadas gRPC. Se fosse iniciar novamente este projeto — ou qualquer outro baseado em gRPC — adotaria uma abordagem orientada a testes desde o início, especialmente para a comunicação entre serviços. Eu criaria stubs próprios para construir uma suíte de testes mais robusta. Durante o desenvolvimento, vários problemas acabaram sendo identificados apenas durante a fase de integração e deploy, o que tornou a depuração mais trabalhosa.
 
 ---
 
