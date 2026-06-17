@@ -42,6 +42,24 @@ Esta seção reúne o relato individual de cada membro do grupo sobre sua partic
 ## 👨‍💻 Daniel dos Santos Barros de Sousa
 
 ### O que fiz
+- **Definição do Contrato gRPC**: Especifiquei o arquivo `reacoes.proto`, definindo as mensagens e os dois RPCs do serviço: `EnviarReacoes` (*client streaming*) e `BuscarReacoes` (unário), estabelecendo o contrato de comunicação entre o Microserviço B e os demais componentes do sistema.
+- **Implementação do Servidor gRPC em Java**: Desenvolvi a classe `ReacaoServiceImpl`, estendendo a base gerada automaticamente pelo compilador Protobuf, com a lógica de recebimento e contagem de reações via streaming e de consulta por identificador de desabafo.
+- **Persistência em Memória com Segurança de Concorrência**: Implementei a classe `ReacaoRepository` utilizando `ConcurrentHashMap` e a operação atômica `merge`, garantindo integridade dos dados sob acesso simultâneo de múltiplas threads do servidor gRPC.
+- **Configuração do Build e Empacotamento**: Configurei o `pom.xml` com o `protobuf-maven-plugin` para geração automática de código a partir do `.proto`, o `maven-shade-plugin` para empacotamento em fat JAR executável e o `maven-surefire-plugin` para execução de testes.
+- **Containerização**: Elaborei o `Dockerfile` do serviço utilizando a imagem `eclipse-temurin:21-jre`, tornando o servidor pronto para execução isolada e integração com o cluster Kubernetes do projeto.
+
+### O que aprendi
+- **Funcionamento Prático do gRPC e Protobuf**: Compreendi como o arquivo `.proto` atua como contrato entre serviços de linguagens diferentes e como o compilador gera automaticamente as classes Java de mensagens e a classe base do servidor, dispensando implementação manual dessas estruturas.
+- **Tipos de Comunicação gRPC**: Aprendi a distinguir os quatro modelos de comunicação e a aplicar dois deles no mesmo serviço, entendendo em quais cenários o *client streaming* é mais adequado do que chamadas unárias repetidas.
+- **Concorrência em Servidores gRPC**: Entendi que o framework processa requisições em múltiplas threads simultaneamente e que estruturas como `HashMap` não são seguras nesse contexto, tornando o uso de `ConcurrentHashMap` com operações atômicas uma exigência de correção, não uma preferência.
+- **Empacotamento de Aplicações Java**: Compreendi o propósito do fat JAR e o papel do Maven Shade Plugin na geração de um artefato autossuficiente adequado a ambientes sem acesso a repositórios de dependências.
+
+### Dificuldades superadas
+- Configurar o `pom.xml` para integração correta entre o plugin Protobuf, o compilador `protoc` e o Maven Shade Plugin, lidando com detalhes como a necessidade do `os-maven-plugin` para detecção de plataforma e o risco de colisão de arquivos SPI do Netty durante o empacotamento.
+- Compreender e aplicar corretamente os mecanismos de concorrência, partindo apenas da base teórica vista em aula e chegando a uma implementação que garante segurança de dados sob carga paralela real.
+
+
+### O que fiz
 *(A preencher)*
 
 ### O que aprendi
